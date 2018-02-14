@@ -41,11 +41,54 @@ RSpec.describe Cart, type: :model do
 
       expect(cart.total_price).to be 900
     end
-    it "特別活動可能可搭配折扣（例如聖誕節的時候全面打 9 折，或是滿額滿千送百）"
+    it "特別活動可能可搭配折扣（例如聖誕節的時候全面打 9 折，或是滿額滿千送百）" do
+      p1 = Product.create(title: "Card House", price: 100)
+      p2 = Product.create(title: "Call Me Maybe", price: 200)
+
+      cart = Cart.new
+      5.times{
+        cart.add_item(p1.id)
+        cart.add_item(p2.id)
+      }
+
+      expect(cart.ninty_off).to be 1500 * 0.9
+      expect(cart.hundred_free).to be 1500 - 100
+
+      5.times{
+        cart.add_item(p1.id)
+        cart.add_item(p2.id)
+      }
+
+      expect(cart.hundred_free).to be 3000 - 300
+
+    end
   end
 
   describe "購物車進階功能" do
-    it "可以將購物車內容轉換成 Hash，存到 Session 裡"
-    it "可以把 Session 的內容（Hash 格式），還原成購物車的內容"
+    it "可以將購物車內容轉換成 Hash，存到 Session 裡" do
+      cart = Cart.new
+      3.times { cart.add_item 1}
+      5.times { cart.add_item 2}
+
+      expect(cart.serialize).to eq session_hash
+
+    end
+    it "可以把 Session 的內容（Hash 格式），還原成購物車的內容" do
+      cart = Cart.from_hash(session_hash)
+
+      expect(cart.items.first.product_id).to be 1
+      expect(cart.items.first.quantity).to be 3
+      expect(cart.items.second.product_id).to be 2
+      expect(cart.items.second.quantity).to be 5
+    end
+  end
+  private
+  def session_hash
+    {
+      items: [
+        { product_id: 1, quantity: 3},
+        { product_id: 2, quantity: 5}
+      ]
+    }
   end
 end
