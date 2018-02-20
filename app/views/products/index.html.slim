@@ -12,7 +12,7 @@ table.table.table-hover
     - @products.each do |product|
       tr
         td
-          = link_to '放到購物車',  "#", class: "btn btn-xs btn-danger"
+          = link_to '放到購物車',  add_cart_path(product), method: "post", class: "btn btn-xs btn-danger"
           = product.title
         td
           = product.price
