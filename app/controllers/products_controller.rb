@@ -21,8 +21,8 @@ class ProductsController < ApplicationController
     redirect_to new_product_path
   end
 
-  # def edit
-  # end
+  def edit
+  end
 
   def update
     @product.update_attributes!(product_params)
