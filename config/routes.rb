@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resource :cart, only: [:show, :destroy] do
     collection do
       post :add, path:'add/:id'
+      delete :remove , path: 'remove/:id'
     end
   end
 end

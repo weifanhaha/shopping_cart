@@ -34,6 +34,8 @@ class ProductsController < ApplicationController
   end
 
   def destroy
+    current_cart.delete_item(@product.id.to_s)
+    session[Cart::SessionKey] = current_cart.serialize
     @product.destroy!
     flash[:success] = "商品已刪除"
     redirect_to products_path

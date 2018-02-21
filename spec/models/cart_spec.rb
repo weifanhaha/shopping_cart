@@ -17,7 +17,7 @@ RSpec.describe Cart, type: :model do
       expect(cart.items.first.quantity).to be 3
       expect(cart.items.second.quantity).to be 5
     end
-    it "商品可以放到購物車裡，也可以再拿出來" do
+    it "商品可以放到購物車裡" do
       cart = Cart.new
       p1 = Product.create(title: "Card House")
       p2 = Product.create(title: "Call Me By Your Name")
@@ -28,6 +28,18 @@ RSpec.describe Cart, type: :model do
       expect(cart.items.first.product_id).to be p1.id
       expect(cart.items.second.product_id).to be p2.id
       expect(cart.items.first.product).to be_a Product
+    end
+    it "商品可以從購物車裡拿出" do
+      cart = Cart.new
+      p1 = Product.create(title: "Card House")
+      p2 = Product.create(title: "Call Me By Your Name")
+
+      4.times { cart.add_item(p1.id) }
+      3.times { cart.add_item(p2.id) }
+
+      cart.delete_item p1.id
+      expect(cart.items.length). to be 1
+      expect(cart.items.first.product_id).to be p2.id
     end
     it "可以計算整台購物車的總消費金額" do
       p1 = Product.create(title: "Card House", price: 100)

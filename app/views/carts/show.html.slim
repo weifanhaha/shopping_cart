@@ -1,0 +1,35 @@
+h1 購物車
+
+= link_to '清空購物車', cart_path, method: "delete", data: { confirm: "確定清空購物車？" }, class: "btn btn-danger"
+
+table.table.table-hover
+  thead
+    tr
+      td 商品名稱
+      td 數量
+      td 單價
+      td 小記
+      td 處理
+  tbody
+    - current_cart.items.each do |item|
+      tr
+        td
+          = item.product.title
+        td
+          = item.quantity
+        td
+          = item.product.price
+        td
+          = item.price
+        td
+          = link_to '加購', add_cart_path(item.product), method: "post" ,class: "btn btn-default btn-xs"
+          = link_to '不買了', remove_cart_path(item.product), method: "delete", data: { confirm: "確定不要嗎？" } ,class: "btn btn-default btn-xs"
+  tfoot
+    tr
+      td colspan="3"
+        | 總計
+      td colspan="2"
+        = current_cart.total_price
+
+  = link_to '繼續選購', products_path, class: "btn btn-default"
+  = link_to '結帳', '#', class: "btn btn-default"

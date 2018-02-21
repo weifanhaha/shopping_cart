@@ -1,4 +1,6 @@
 class Cart
+  SessionKey = :cart001
+
   attr_reader :items
 
   def initialize(items = [])
@@ -13,6 +15,11 @@ class Cart
     else
       @items << CartItem.new(product_id)
     end
+  end
+
+  def delete_item(product_id)
+    found_item = items.find { |item| item.product_id == product_id }
+    @items.delete(found_item) unless found_item.nil?
   end
 
   def empty?
