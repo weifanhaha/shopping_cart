@@ -32,4 +32,29 @@ table.table.table-hover
         = current_cart.total_price
 
   = link_to '繼續選購', products_path, class: "btn btn-default"
-  = link_to '結帳', '#', class: "btn btn-default"
+  #checkout-btn.btn.btn-default
+    | 結帳
+
+#checkout-form style="display: none;"
+  = form_tag("/cart/checkout", method: :post) do
+    #payment-form
+    = submit_tag("確認付款", class: "btn btn-default btn-success")
+
+
+script src="https://js.braintreegateway.com/js/braintree-2.30.0.min.js"
+
+javascript:
+  var clientToken = "#{@client_token}";
+
+  braintree.setup(clientToken, "dropin", {
+    container: "payment-form"
+  });
+
+  $(document).on('turbolinks:load', function() {
+    $('#checkout-btn').click(function(){
+      $('#checkout-form').slideDown();
+    });
+  });
+
+
+

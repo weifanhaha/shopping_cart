@@ -1,12 +1,11 @@
 class ProductsController < ApplicationController
-  before_action :find_product, only: [:show, :edit, :update, :destroy, :checkout]
+  before_action :find_product, only: [:show, :edit, :update, :destroy]
 
   def index
     @products = Product.all
   end
 
   def show
-    @client_token = Braintree::ClientToken.generate
   end
 
   def new
@@ -40,22 +39,6 @@ class ProductsController < ApplicationController
     @product.destroy!
     flash[:success] = "商品已刪除"
     redirect_to products_path
-  end
-
-  def checkout
-    nonce = params[:payment_method_nonce]
-
-    result = Braintree::Transaction.sale(
-      amount: @product.price ,
-      payment_method_nonce: nonce,
-    )
-    if result
-      flash[:success] = "刷卡成功"
-      redirect_to products_path
-    else
-      flash[:error] = "請確認卡號與日期"
-      redirect_to checkout_product_path
-    end
   end
 
   private
