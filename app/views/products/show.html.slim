@@ -1,0 +1,28 @@
+h1 商品詳情
+
+p
+  strong Title:
+  = @product.title
+p
+  strong Description:
+  = @product.description
+p
+  strong Price:
+  = @product.price
+
+= link_to 'Back', products_path, class: 'btn btn-default'
+hr
+
+= form_for(@product, url: checkout_product_path(@product), method: :post) do |f|
+  #payment-form
+  = f.submit "確認付款", class: "btn btn-default btn-success"
+
+
+script src="https://js.braintreegateway.com/js/braintree-2.30.0.min.js"
+
+javascript:
+  var clientToken = "#{@client_token}";
+
+  braintree.setup(clientToken, "dropin", {
+    container: "payment-form"
+  });

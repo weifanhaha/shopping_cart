@@ -8,15 +8,17 @@ table.table.table-hover
     tr
       td 商品名稱
       td 售價
+      td 有興趣
       td 處理
   tbody
     - @products.each do |product|
       tr
         td
-          = link_to '放到購物車',  add_cart_path(product), method: "post", class: "btn btn-xs btn-danger"
-          = product.title
+          = link_to product.title, product_path(product)
         td
           = product.price
+        td
+          = link_to '放到購物車',  add_cart_path(product), method: "post", class: "btn btn-xs btn-danger"
         td
           = link_to '編輯', edit_product_path(product), class: "btn btn-xs btn-default"
           = link_to '刪除', product, method: "delete", data: { confirm: "確定刪除？" }, class: "btn btn-xs btn-default"
